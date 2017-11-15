@@ -34,6 +34,18 @@ public class Employee {
 
     private List<Employee> subordinate=new ArrayList<>();
 
+    public Employee(Integer employeeId, String firstName, String lastName, Date dateOfEmployment, Employee leader, List<Employee> subordinate) {
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfEmployment = dateOfEmployment;
+        this.leader = leader;
+        this.subordinate = subordinate;
+    }
+
+    public Employee() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "EMPLOYEE_ID")

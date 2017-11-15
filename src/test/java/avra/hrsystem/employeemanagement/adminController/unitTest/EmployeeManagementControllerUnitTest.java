@@ -26,7 +26,7 @@ public class EmployeeManagementControllerUnitTest {
 
     @Before
     public void before(){
-        employeeManagementController = new EmployeeManagementController(employeeRepository);
+        employeeManagementController =new EmployeeManagementController(employeeRepository);
     }
 
     @Test

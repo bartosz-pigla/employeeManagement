@@ -1,17 +1,17 @@
 package avra.hrsystem.employeemanagement.controller;
 
 import avra.hrsystem.employeemanagement.model.Employee;
+import avra.hrsystem.employeemanagement.model.dto.ErrorMessage;
 import avra.hrsystem.employeemanagement.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/employee")
 public class EmployeeManagementController {
     private EmployeeRepository employeeRepository;
 
@@ -32,5 +32,10 @@ public class EmployeeManagementController {
         else{
             return employeeRepository.findAll();
         }
+    }
+
+    @PostMapping
+    public void create(@RequestBody @Valid Employee employee){
+        System.out.println(employee);
     }
 }

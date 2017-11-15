@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,9 +31,12 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("dev")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class EmployeeTreeControllerIntegerationTest {
+public class EmployeeTreeControllerIntegrationTest {
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private MessageSource messageSource;
 
 	private MockMvc mockMvc;
 
@@ -39,7 +45,7 @@ public class EmployeeTreeControllerIntegerationTest {
 		EmployeeTreeController employeeTreeController =new EmployeeTreeController(employeeRepository);
 		this.mockMvc= MockMvcBuilders
 				.standaloneSetup(employeeTreeController)
-				.setControllerAdvice(new GlobalControllerExceptionHandler())
+				.setControllerAdvice(new GlobalControllerExceptionHandler(messageSource))
 				.build();
 	}
 
