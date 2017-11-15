@@ -1,4 +1,4 @@
-package avra.hrsystem.employeemanagement;
+package avra.hrsystem.employeemanagement.adminController.integrationTest;
 
 import avra.hrsystem.employeemanagement.controller.AdminController;
 import avra.hrsystem.employeemanagement.repository.EmployeeRepository;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @ActiveProfiles("dev")
 @SpringBootTest
-public class EmployeeManagementApplicationTests {
+public class AdminControllerIntegerationTest {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
@@ -44,11 +44,6 @@ public class EmployeeManagementApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8"))
 				.andExpect(jsonPath("$",hasSize(0)));
-	}
-
-	@Test
-	public void test2() throws Exception{
-		assertEquals((new AdminController(employeeRepository)).getTree().size(),0);
 	}
 
 }
