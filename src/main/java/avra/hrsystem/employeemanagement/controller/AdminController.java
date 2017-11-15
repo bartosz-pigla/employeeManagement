@@ -8,22 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    private DevService devService;
     private EmployeeRepository employeeRepository;
 
-    public AdminController(DevService devService, EmployeeRepository employeeRepository) {
-        this.devService = devService;
+    public AdminController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        List<Employee> list=employeeRepository.findAll();
-        System.out.println("s");
     }
 
-    @GetMapping
-    public void foo(){
-        System.out.println("GET: foo");
+    @GetMapping("/tree")
+    public Set<Employee> getTree(){
+        return employeeRepository.getTree();
     }
 }
