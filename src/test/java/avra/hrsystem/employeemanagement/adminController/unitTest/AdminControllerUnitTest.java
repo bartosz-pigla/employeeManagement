@@ -1,10 +1,9 @@
 package avra.hrsystem.employeemanagement.adminController.unitTest;
 
 import avra.hrsystem.employeemanagement.controller.AdminController;
+import avra.hrsystem.employeemanagement.exceptions.WrongFieldException;
 import avra.hrsystem.employeemanagement.repository.EmployeeRepository;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,18 +23,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class AdminControllerUnitTest {
 	@Autowired
-	private static EmployeeRepository employeeRepository;
+	private EmployeeRepository employeeRepository;
 
-	private static AdminController adminController;
+	private AdminController adminController;
 
-	@BeforeClass
-	public static void beforeClass(){
-		AdminController adminController=new AdminController(employeeRepository);
+	@Before
+	public void before(){
+		adminController=new AdminController(employeeRepository);
 	}
 
+	@Ignore
 	@Test
 	public void getTree_ShouldReturnEmptySet_WhenUnimplemented() throws Exception{
 		assertEquals(adminController.getTree().size(),0);
+	}
+
+	@Test
+	public void getTree_ShouldReturn2Roots() throws Exception{
+		assertEquals(adminController.getTree().size(),2);
+	}
+
+	@Test(expected = WrongFieldException.class)
+	public void getTree_ShouldThrowWrongFieldException() throws Exception{
+		adminController.getOrderedTree("wrongField");
+	}
+
+	@Test
+	public void getTree_ShouldReturnEmptyTree_WhenNoEmployees() throws Exception{
+		employeeRepository.deleteAll();
+		assertEquals(adminController.getTree().size(),0);
+	}
+
+	@Test
+	public void getTree_ShouldReturnEmptyOrderedTree_WhenNoEmployees() throws Exception{
+		employeeRepository.deleteAll();
+		assertEquals(adminController.getOrderedTree("employeeId").size(),0);
 	}
 
 }

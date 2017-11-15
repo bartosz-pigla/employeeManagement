@@ -1,13 +1,15 @@
 package avra.hrsystem.employeemanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -27,9 +29,10 @@ public class Employee {
     @Temporal(TemporalType.DATE)
     private Date dateOfEmployment;
 
+    @JsonIgnore
     private Employee leader;
 
-    private Set<Employee> subordinate=new HashSet<>();
+    private List<Employee> subordinate=new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -84,11 +87,11 @@ public class Employee {
     }
 
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
-    public Set<Employee> getSubordinate() {
+    public List<Employee> getSubordinate() {
         return subordinate;
     }
 
-    public void setSubordinate(Set<Employee> subordinate) {
+    public void setSubordinate(List<Employee> subordinate) {
         this.subordinate = subordinate;
     }
 
