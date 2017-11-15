@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/admin/tree")
+public class EmployeeTreeController {
     private EmployeeRepository employeeRepository;
 
-    public AdminController(EmployeeRepository employeeRepository) {
+    public EmployeeTreeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping("/tree")
+    @GetMapping
     public List<Employee> getTree(){
         List<Employee> tree= employeeRepository.getTree();
         return tree;
     }
 
-    @GetMapping("/tree/orderBy/{field}")
+    @GetMapping("/orderBy/{field}")
     public List<Employee> getOrderedTree(@PathVariable String field){
         List<Employee> tree=null;
 

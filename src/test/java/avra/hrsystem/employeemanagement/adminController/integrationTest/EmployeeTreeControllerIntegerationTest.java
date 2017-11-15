@@ -1,10 +1,9 @@
 package avra.hrsystem.employeemanagement.adminController.integrationTest;
 
-import avra.hrsystem.employeemanagement.controller.AdminController;
+import avra.hrsystem.employeemanagement.controller.EmployeeTreeController;
 import avra.hrsystem.employeemanagement.controller.GlobalControllerExceptionHandler;
 import avra.hrsystem.employeemanagement.repository.EmployeeRepository;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
@@ -30,7 +28,7 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("dev")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AdminControllerIntegerationTest {
+public class EmployeeTreeControllerIntegerationTest {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
@@ -38,9 +36,9 @@ public class AdminControllerIntegerationTest {
 
 	@Before
 	public void before(){
-		AdminController adminController=new AdminController(employeeRepository);
+		EmployeeTreeController employeeTreeController =new EmployeeTreeController(employeeRepository);
 		this.mockMvc= MockMvcBuilders
-				.standaloneSetup(adminController)
+				.standaloneSetup(employeeTreeController)
 				.setControllerAdvice(new GlobalControllerExceptionHandler())
 				.build();
 	}
