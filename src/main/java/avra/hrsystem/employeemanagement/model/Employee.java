@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "EMPLOYEE")
-public class Employee {
+public class Employee implements Serializable{
     private Integer employeeId;
 
     @NotNull

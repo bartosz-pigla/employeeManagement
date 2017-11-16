@@ -22,8 +22,11 @@ import java.util.stream.Collectors;
 @Repository
 @Transactional
 public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom{
-    @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
+
+    public EmployeeRepositoryImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public List<Employee> getTree() {
@@ -31,18 +34,18 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom{
 
         Query query=session.createQuery("SELECT DISTINCT e FROM Employee e LEFT JOIN FETCH e.subordinate");
 
-        List<Employee> employess=query.list();
+        List<Employee> employees=query.list();
 
-        return employess.stream().filter(e->e.getLeader()==null).collect(Collectors.toList());
+        return employees.stream().filter(e->e.getLeader()==null).collect(Collectors.toList());
     }
 
     @Override
     public List<Employee> getTree(String orderField){
         Session session = entityManager.unwrap(Session.class);
 
-        List<Employee> employess=null;
+        List<Employee> employees=null;
         try{
-            employess=session.createCriteria(Employee.class)
+            employees=session.createCriteria(Employee.class)
                     .setFetchMode("subordinate", FetchMode.JOIN)
                     .addOrder(Order.asc(orderField))
                     .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).list();
@@ -57,6 +60,107 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom{
             }
         }
 
-        return employess.stream().filter(e->e.getLeader()==null).collect(Collectors.toList());
+        return employees.stream().filter(e->e.getLeader()==null).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean update(Employee employee) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Employee old=session.get(Employee.class,employee.getEmployeeId());
+        if(old!=null){
+            session.evict(old);
+            session.update(employee);
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean remove(Integer id) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query query=session.createQuery("FROM Employee e INNER JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
+                .setInteger("employeeId",id);
+
+        List<Employee> employees=query.setMaxResults(1).list();
+        if(employees!=null && employees.size()==1){
+            Employee employeeToRemove=employees.get(0);
+            employeeToRemove.setLeader(null);
+
+            List<Employee> subordinates=employeeToRemove.getSubordinate();
+            if(subordinates!=null && subordinates.size()>0){
+                subordinates.forEach(s->s.setLeader(null));
+            }
+
+            session.delete(employeeToRemove);
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    @Override
+    public boolean assignSubordinateToLeader(Integer subordinateId, Integer leaderId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query query = session.createQuery("FROM Employee e where e.employeeId in (:ids)").setParameterList("ids", new Integer[]{subordinateId,leaderId});
+        List<Employee> list=query.list();
+
+        Optional<Employee> subordinate = list.stream().filter(e->e.getEmployeeId().equals(subordinateId)).findFirst();
+        if(subordinate.isPresent()){
+            Optional<Employee> leader = list.stream().filter(e->e.getEmployeeId().equals(leaderId)).findFirst();
+            if(leader.isPresent()){
+                Employee s=subordinate.get();
+                s.setLeader(leader.get());
+                session.update(s);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unAssignSubordinateToLeader(Integer subordinateId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Employee subordinate=session.get(Employee.class,subordinateId);
+        if(subordinate!=null){
+            subordinate.setLeader(null);
+            session.update(subordinate);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unAssignAllSubordinates(Integer leaderId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query query=session.createQuery("FROM Employee e INNER JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
+                .setInteger("employeeId",leaderId);
+
+        List<Employee> employees=query.setMaxResults(1).list();
+        if(employees!=null && employees.size()==1){
+            Employee leader=employees.get(0);
+
+            List<Employee> subordinates=leader.getSubordinate();
+            if(subordinates!=null && subordinates.size()>0){
+                subordinates.forEach(s->{
+                    s.setLeader(null);
+                    session.update(s);
+                });
+            }
+
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

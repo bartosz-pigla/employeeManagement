@@ -10,4 +10,14 @@ public interface EmployeeRepositoryCustom {
     List<Employee> getTree();
 
     List<Employee> getTree(String orderField);
+
+    boolean update(Employee employee);
+
+    boolean remove(Integer id);
+
+    boolean assignSubordinateToLeader(Integer subordinateId, Integer leaderId);
+
+    boolean unAssignSubordinateToLeader(Integer subordinateId);
+
+    boolean unAssignAllSubordinates(Integer leaderId);
 }
