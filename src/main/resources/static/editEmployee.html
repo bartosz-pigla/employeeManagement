@@ -104,7 +104,7 @@
     <label>
         <input name="radio" type="radio" ng-model="controller.employee.leader.leaderId" ng-value="data.employeeId"> Assign
     </label>
-    <ul >
+    <ul ng-show="initialLeaderId!==data.employeeId">
         <li class="row" ng-repeat="data in data.subordinate" ng-include="'assign_leader_tree.html'"></li>
     </ul>
 </script>

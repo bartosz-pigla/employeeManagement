@@ -1,10 +1,11 @@
 angular.module('employeeManagementApp')
     .controller('editEmployeeController',
-        function ($scope, $http, $routeParams, employeeService, employeeTreeService) {
+        function ($scope, $http, $routeParams,$location, employeeService, employeeTreeService) {
             var id=$routeParams.employeeId;
             var self=this;
             $scope.edited=null;
             $scope.assigned=null;
+            $scope.initialLeaderId=null;
             self.employee={};
 
             employeeService.getEmployee(id).then(function (response) {
@@ -14,6 +15,7 @@ angular.module('employeeManagementApp')
                     if(response.status===200){
                         self.employee.leader={};
                         self.employee.leader.leaderId=response.data;
+                        $scope.initialLeaderId=response.data;
                     }
                 })
             });
@@ -34,6 +36,9 @@ angular.module('employeeManagementApp')
                             employeeService.assignSubordinateToLeader(self.employee.employeeId,self.employee.leader.leaderId).then(function (assignmentResponse) {
                                 console.log('ASSIGN: '+JSON.stringify(assignmentResponse));
                                 $scope.assigned=assignmentResponse.status===200;
+                                if($scope.assigned){
+                                    $location.path('/employeeTree');
+                                }
                             });
                         }
                     }

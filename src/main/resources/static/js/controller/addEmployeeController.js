@@ -1,18 +1,18 @@
 angular.module('employeeManagementApp')
     .controller('addEmployeeController',
-        function ($scope, $http,employeeTreeService, employeeService) {
+        function ($scope, $http,employeeTreeService, employeeService, $location) {
             var self = this;
-            self.employee={};
+            $scope.employee={};
             $scope.added=null;
 
             self.addEmployee=function () {
-                console.log('EMPLOYEE: '+JSON.stringify(self.employee));
+                console.log('EMPLOYEE: '+JSON.stringify($scope.employee));
 
-                employeeService.createEmployee(self.employee).then(function (response) {
+                employeeService.createEmployee($scope.employee).then(function (response) {
                     console.log('response: '+JSON.stringify(response));
                     $scope.added=response.status===200;
                     if(response.status===200){
-                        self.employee={};
+                        $location.path('/employeeTree');
                     }
                 });
             };
@@ -25,6 +25,5 @@ angular.module('employeeManagementApp')
                     self.tree=response.data;
                 }
             });
-
         })
 ;
