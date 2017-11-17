@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet"
+          href="css/row.css"/>
+
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+</head>
+<body ng-app="employeeManagementApp" ng-cloak class="ng-cloak">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid" ng-controller="navigationController as nav">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Expand navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <div ng-class="{active:nav.tab('employeeListController')}"><a class="navbar-brand" href="#employeeList"><strong>Employee Management</strong></a></div>
+        </div>
+
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" >
+                <li ng-class="{active:nav.tab('employeeTreeController')}"><a href="#employeeTree"><span>Employee tree</span>
+                </a></li>
+                <li ng-class="{active:nav.tab('employeeListController')}"><a href="#employeeList"><span>Employee list</span>
+                </a></li>
+                <li ng-class="{active:nav.tab('addEmployeeController')}"><a href="#addEmployee"><span>Add employee</span>
+                </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="?lang=en"><strong>Logged as: admin</strong> </a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+<div class="container-fluid" ng-view></div>
+<!-- /.container-fluid -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="js/controller/start.js"></script>
+
+<script src="js/controller/addEmployeeController.js"></script>
+<script src="js/controller/editEmployeeController.js"></script>
+<script src="js/controller/employeeListController.js"></script>
+<script src="js/controller/employeeTreeController.js"></script>
+<script src="js/controller/navigationController.js"></script>
+
+<script src="js/helper/swipeProductForm.js"></script>
+
+</body>
+</html>
