@@ -1,11 +1,16 @@
 angular.module('employeeManagementApp')
     .controller('addEmployeeController',
-        function ($scope, $http) {
+        function ($scope, $http, employeeService) {
             var self = this;
             self.employee={};
 
             self.addEmployee=function () {
                 console.log('EMPLOYEE: '+JSON.stringify(self.employee));
+
+                employeeService.createEmployee(self.employee).then(function (response) {
+                    console.log('response: '+JSON.stringify(response));
+                    
+                });
             };
 
             self.tree = [
