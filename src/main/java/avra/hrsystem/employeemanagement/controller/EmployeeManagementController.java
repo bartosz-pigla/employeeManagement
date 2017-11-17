@@ -75,6 +75,22 @@ public class EmployeeManagementController {
         }
     }
 
+    @GetMapping("/leader/{subordinateId}")
+    public ResponseEntity<Integer> getLeaderOfSubordinate(@PathVariable Integer subordinateId){
+        Integer leaderId=employeeRepository.findLeaderIdOfSubordinate(subordinateId);
+        if(leaderId!=null && leaderId>0){
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(leaderId);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(leaderId);
+        }
+    }
+
+    @PutMapping("/unAssignAllSubordinatesunAssignAllSubordinates/{id}")
+    public ResponseEntity<Void> unAssignAllSubordinatesunAssignAllSubordinates(@PathVariable Integer id){
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(null);
+    }
+
     @PutMapping("/assign/{subordinateId}/{leaderId}")
     public ResponseEntity<Void> assign(@PathVariable Integer subordinateId,@PathVariable Integer leaderId){
         if((subordinateId.intValue()!=leaderId.intValue())&&employeeRepository.assignSubordinateToLeader(subordinateId,leaderId)){
@@ -85,8 +101,8 @@ public class EmployeeManagementController {
         }
     }
 
-    @PutMapping("/unassign/{subordinateId}}")
-    public ResponseEntity<Void> unAssign(@PathVariable Integer subordinateId){
+    @PutMapping("/unassign/{subordinateId}")
+    public ResponseEntity<Void> unassign(@PathVariable Integer subordinateId){
         if(employeeRepository.unAssignSubordinateToLeader(subordinateId)){
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(null);
         }
@@ -95,7 +111,7 @@ public class EmployeeManagementController {
         }
     }
 
-    @PutMapping("/unassignAllSubordinates/{leaderId}}")
+    @PutMapping("/unassignAllSubordinates/{leaderId}")
     public ResponseEntity<Void> unAssignAllSubordinates(@PathVariable Integer leaderId){
         if(employeeRepository.unAssignAllSubordinates(leaderId)){
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(null);

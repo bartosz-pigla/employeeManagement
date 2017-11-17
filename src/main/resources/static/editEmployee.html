@@ -17,9 +17,14 @@
                             <form class="item active login-form" name="employeeForm">
                                 <h3 align="center"><strong>Edit employee</strong></h3>
 
-                                <div class="alert alert-danger alert-dismissable">
+                                <div ng-show="edited===false" class="alert alert-danger alert-dismissable">
                                     <a href="" class="close"></a>
-                                    <strong>Warning!</strong> Failed to edit new employee
+                                    <strong>Warning!</strong> Failed to edit employee
+                                </div>
+
+                                <div ng-show="assigned===false" class="alert alert-danger alert-dismissable">
+                                    <a href="" class="close"></a>
+                                    <strong>Warning!</strong> Failed to assign leader to employee. Please check whether leader and subordingate are different
                                 </div>
 
                                 <!--FIRST NAME-->
@@ -73,7 +78,7 @@
                                 <h3 align="center"><strong>Assign employee</strong></h3>
 
                                 <div class="form-group">
-                                    <button class="btn btn-default" ng-click="controller.employee.leaderId=null">Unassign leader</button>
+                                    <button class="btn btn-default" ng-click="controller.employee.leader=null">Unassign leader</button>
                                 </div>
 
                                 <ul class="list-group"><li class="list-group-item"  ng-repeat="data in controller.tree" ng-include="'assign_leader_tree.html'"></ul>
@@ -97,7 +102,7 @@
     {{data.lastName+' '+data.firstName+' '}}
     {{data.dateOfEmployment | date: "dd-MM-y"}}
     <label>
-        <input name="radio" type="radio" ng-model="controller.employee.leaderId" ng-value="data.employeeId"> Assign
+        <input name="radio" type="radio" ng-model="controller.employee.leader.leaderId" ng-value="data.employeeId"> Assign
     </label>
     <ul >
         <li class="row" ng-repeat="data in data.subordinate" ng-include="'assign_leader_tree.html'"></li>

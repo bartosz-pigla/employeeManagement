@@ -17,12 +17,12 @@
                             <form class="item active login-form" name="employeeForm">
                                 <h3 align="center"><strong>Add employee</strong></h3>
 
-                                <div class="alert alert-success alert-dismissable">
+                                <div ng-show="added==true" class="alert alert-success alert-dismissable">
                                     <a href="" class="close" ></a>
                                     <strong>Success!</strong> You have successfully added new employee
                                 </div>
 
-                                <div class="alert alert-danger alert-dismissable">
+                                <div ng-show="added==false" class="alert alert-danger alert-dismissable">
                                     <a href="" class="close"></a>
                                     <strong>Warning!</strong> Failed to add new employee
                                 </div>

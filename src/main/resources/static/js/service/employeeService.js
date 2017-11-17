@@ -13,6 +13,12 @@ angular.module('employeeManagementApp').service('employeeService', ['$http', fun
         return http.post(url,employee);
     };
     this.unassignAllSubordinates=function (leaderId) {
-        return http.put(url+'/unassign/'+leader);
+        return http.put(url+'/unassignAllSubordinates/'+leaderId);
     };
+    this.assignSubordinateToLeader=function (subordinateId, leaderId) {
+        return http.put(url+'/assign/'+subordinateId+'/'+leaderId);
+    };
+    this.getLeaderId=function (subordinateId) {
+        return http.get(url+'/leader/'+subordinateId);
+    }
 }]);

@@ -99,7 +99,7 @@ public class EmployeeManagementControllerUnitTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void unAssignSubordinate_ShouldUnAssign_WhenSubordinateExists() throws Exception{
         int employeeId=1;
-        ResponseEntity<Void> response = employeeManagementController.unAssign(employeeId);
+        ResponseEntity<Void> response = employeeManagementController.unassign(employeeId);
         assertEquals(response.getStatusCode(),HttpStatus.OK);
         Employee employee=employeeRepository.findOneAndFetchSubordinates(employeeId);
         assertNull(employee.getLeader());
@@ -108,7 +108,7 @@ public class EmployeeManagementControllerUnitTest {
     @Test
     public void unAssignSubordinate_ShouldNotUnAssign_WhenSubordinateNotExists() throws Exception{
         int employeeId=-1;
-        ResponseEntity<Void> response= employeeManagementController.unAssign(employeeId);
+        ResponseEntity<Void> response= employeeManagementController.unassign(employeeId);
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 

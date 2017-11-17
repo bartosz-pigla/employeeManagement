@@ -12,4 +12,7 @@ import javax.transaction.Transactional;
 public interface EmployeeRepository extends JpaRepository<Employee,Integer>, EmployeeRepositoryCustom{
     @Query("SELECT e FROM Employee e INNER JOIN FETCH e.subordinate WHERE e.employeeId = :id")
     Employee findOneAndFetchSubordinates(@Param("id")Integer id);
+
+    @Query("SELECT e.leader.employeeId FROM Employee e WHERE e.employeeId = :subordinateId")
+    Integer findLeaderIdOfSubordinate(@Param("subordinateId") Integer subordinateId);
 }

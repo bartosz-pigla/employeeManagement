@@ -83,7 +83,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom{
     public boolean remove(Integer id) {
         Session session = entityManager.unwrap(Session.class);
 
-        Query query=session.createQuery("FROM Employee e INNER JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
+        Query query=session.createQuery("FROM Employee e LEFT JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
                 .setInteger("employeeId",id);
 
         List<Employee> employees=query.setMaxResults(1).list();
@@ -142,7 +142,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom{
     public boolean unAssignAllSubordinates(Integer leaderId) {
         Session session = entityManager.unwrap(Session.class);
 
-        Query query=session.createQuery("FROM Employee e INNER JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
+        Query query=session.createQuery("FROM Employee e LEFT JOIN FETCH e.subordinate WHERE e.employeeId=:employeeId")
                 .setInteger("employeeId",leaderId);
 
         List<Employee> employees=query.setMaxResults(1).list();

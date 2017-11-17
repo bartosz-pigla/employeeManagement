@@ -1,9 +1,21 @@
 angular.module('employeeManagementApp')
     .controller('employeeTreeController',
-        function ($scope, $http, $location) {
+        function ($scope, $http, $location, employeeTreeService, employeeService) {
             var self = this;
             var employeeToDelete=null;
-            var subordinates=null;
+            var leader=null;
+            self.treeLoadingSuccess=null;
+            $scope.deleted=null;
+            $scope.unassigned=null;
+
+            employeeTreeService.getTree().then(function (response) {
+                console.log('GET TREE: '+JSON.stringify(response));
+                self.treeLoadingSuccess=response.status===200;
+                if(self.treeLoadingSuccess){
+                    console.log('TREE FROM SERVICE: '+response.data);
+                    $scope.tree=response.data;
+                }
+            });
 
             $scope.addSubordinate=function (data) {
                 console.log('SUBORDINATE EMPLOYEE: '+data.employeeId);
@@ -11,11 +23,23 @@ angular.module('employeeManagementApp')
             };
 
             $scope.deleteEmployee=function () {
-                console.log('ASSIGNED EMPLOYEE: ');
+                console.log('DELETE EMPLOYEE: '+JSON.stringify(employeeToDelete));
+                employeeService.deleteEmployee(employeeToDelete.employeeId).then(function (response) {
+                    $scope.deleted=response.status===200;
+                    console.log('DELETED: '+self.deleted);
+                    $scope.tree.forEach(function (e) { if(e.employeeId===employeeToDelete.employeeId){e.subordinate.forEach(function (s) { s.leaderId=null;$scope.tree.push(s); })} });
+                    $scope.tree=$scope.tree.filter(function (e) { return e.employeeId!==employeeToDelete.employeeId; });
+                });
             };
 
             $scope.unassignAllSubordinates=function () {
-                console.log('unassign');
+                console.log('UNASSIGN EMPLOYEE: '+JSON.stringify(leader));
+                employeeService.unassignAllSubordinates(leader.employeeId).then(function (response) {
+                    $scope.unassigned=response.status===200;
+                    console.log('UNASSIGNED: '+self.unassigned);
+                    leader.subordinate.forEach(function (s) { s.leaderId=null; $scope.tree.push(s);});
+                    leader.subordinate=null;
+                });
             };
 
             $scope.markEmployeeToDelete=function (data) {
@@ -24,25 +48,11 @@ angular.module('employeeManagementApp')
             };
 
             $scope.markSubordinatesToUnassign=function (data) {
-                console.log('subordinates to delete marked');
-                subordinates=data;
+                console.log('leader to delete marked: '+JSON.stringify(data));
+                leader=data;
             };
 
             $scope.editEmployee=function (data) {
                 $location.path('/editEmployee/' + data.employeeId);
             };
-
-            $scope.tree = [
-                {
-                    employeeId: 1, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: [
-                    {employeeId: 2, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: []},
-                    {employeeId: 3, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: []},
-                    {employeeId: 4, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: [
-                        {employeeId: 5, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: [
-                            {employeeId: 6, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: []}
-                        ]}
-                    ]}
-                ]
-                }
-            ];
         });
