@@ -75,7 +75,7 @@
     <button ng-click="editEmployee(data)" class="btn btn-default btn-xs">Edit employee</button>
     <button ng-click="addSubordinate(data)" class="btn btn-default btn-xs">Add subordinate</button>
     <button ng-click="markEmployeeToDelete(data)" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteEmployeeModal">Delete employee</button>
-    <button ng-click="markSubordinatesToDelete(data)" ng-show="data.subordinate.length > 0" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#unassignAllSubordinatesModal">Unassign all subordinates</button>
+    <button ng-click="markSubordinatesToUnassign(data)" ng-show="data.subordinate.length > 0" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#unassignAllSubordinatesModal">Unassign all subordinates</button>
     <ul>
         <li class="row" ng-repeat="data in data.subordinate" ng-include="'employee_tree.html'"></li>
     </ul>

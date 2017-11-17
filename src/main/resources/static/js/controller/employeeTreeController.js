@@ -23,7 +23,7 @@ angular.module('employeeManagementApp')
                 employeeToDelete=data;
             };
 
-            $scope.markSubordinatesToDelete=function (data) {
+            $scope.markSubordinatesToUnassign=function (data) {
                 console.log('subordinates to delete marked');
                 subordinates=data;
             };
