@@ -2,21 +2,13 @@ angular.module('employeeManagementApp')
     .controller('addEmployeeController',
         function ($scope, $http) {
             var self = this;
+            self.employee={};
 
-            var assigned=null;
-
-            $scope.assign=function (data) {
-                console.log('ASSIGNED EMPLOYEE: '+JSON.stringify(data));
-                assigned=data;
+            self.addEmployee=function () {
+                console.log('EMPLOYEE: '+JSON.stringify(self.employee));
             };
 
-            $scope.unassign=function () {
-                console.log('unassign');
-
-                assigned=null;
-            };
-
-            $scope.tree = [
+            self.tree = [
                 {
                     employeeId: 1, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: [
                         {employeeId: 2, lastName: 'Darecka', firstName: 'Anna', dateOfEmployment: new Date(), subordinate: []},
@@ -29,10 +21,6 @@ angular.module('employeeManagementApp')
                 ]
                 }
             ];
-
-            self.assignEmployee = function(data) {
-                console.log(data);
-            };
 
         })
 ;

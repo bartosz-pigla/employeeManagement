@@ -3,13 +3,8 @@ var pizzaShopManagementApp = angular.module('employeeManagementApp',['ngRoute'])
         function ($routeProvider, $httpProvider) {
             $routeProvider
                 .when('/', {
-                    templateUrl: 'employeeList.html',
-                    controller: 'employeeListController',
-                    controllerAs: 'controller'
-                })
-                .when('/employeeList', {
-                    templateUrl: 'employeeList.html',
-                    controller: 'employeeListController',
+                    templateUrl: 'employeeTree.html',
+                    controller: 'employeeTreeController',
                     controllerAs: 'controller'
                 })
                 .when('/employeeTree', {
@@ -22,7 +17,12 @@ var pizzaShopManagementApp = angular.module('employeeManagementApp',['ngRoute'])
                     controller: 'addEmployeeController',
                     controllerAs: 'controller'
                 })
-                .when('/editEmployee', {
+                .when('/addSubordinate/:leaderId', {
+                    templateUrl: 'addSubordinate.html',
+                    controller: 'addSubordinateController',
+                    controllerAs: 'controller'
+                })
+                .when('/editEmployee/:employeeId', {
                     templateUrl: 'editEmployee.html',
                     controller: 'editEmployeeController',
                     controllerAs: 'controller'

@@ -1,11 +1,13 @@
 angular.module('employeeManagementApp')
     .controller('employeeTreeController',
-        function ($scope, $http) {
+        function ($scope, $http, $location) {
             var self = this;
             var employeeToDelete=null;
+            var subordinates=null;
 
-            $scope.addEmployee=function () {
-                console.log('ASSIGNED EMPLOYEE: ');
+            $scope.addSubordinate=function (data) {
+                console.log('SUBORDINATE EMPLOYEE: '+data.employeeId);
+                $location.path('/addSubordinate/' + data.employeeId);
             };
 
             $scope.deleteEmployee=function () {
@@ -17,11 +19,17 @@ angular.module('employeeManagementApp')
             };
 
             $scope.markEmployeeToDelete=function (data) {
+                console.log('employee to delete marked');
                 employeeToDelete=data;
             };
 
             $scope.markSubordinatesToDelete=function (data) {
-                markSubordinatesToDelete()
+                console.log('subordinates to delete marked');
+                subordinates=data;
+            };
+
+            $scope.editEmployee=function (data) {
+                $location.path('/editEmployee/' + data.employeeId);
             };
 
             $scope.tree = [
