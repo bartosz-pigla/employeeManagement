@@ -78,15 +78,15 @@
                                 <h3 align="center"><strong>Assign employee</strong></h3>
 
                                 <div class="form-group">
-                                    <button class="btn btn-default" ng-click="controller.employee.leaderId=null">Unassign leader</button>
+                                    <button class="btn btn-default" ng-click="employee.leader.employeeId=null">Unassign leader</button>
                                 </div>
 
-                                <ul class="list-group"><li class="list-group-item"  ng-repeat="data in controller.tree" ng-include="'assign_leader_tree.html'"></ul>
+                                <ul class="list-group"><li class="list-group-item"  ng-repeat="data in tree" ng-include="'assign_leader_tree.html'"></ul>
 
                                 <button href="#carousel-example-generic" class="btn btn-default" data-slide="prev">Previous
                                 </button>
                                 <button href="#carousel-example-generic" class="btn btn-primary" data-slide="next"
-                                        ng-click="controller.addEmployee()">
+                                        ng-click="addEmployee()">
                                     Add employee
                                 </button>
                             </div>
@@ -102,7 +102,7 @@
     {{data.lastName+' '+data.firstName+' '}}
     {{data.dateOfEmployment | date: "dd-MM-y"}}
     <label>
-        <input name="radio" type="radio" ng-model="controller.employee.leaderId" ng-value="data.employeeId"> Assign
+        <input name="radio" type="radio" ng-model="employee.leader.employeeId" ng-value="data.employeeId"> Assign
     </label>
     <ul >
         <li class="row" ng-repeat="data in data.subordinate" ng-include="'assign_leader_tree.html'"></li>

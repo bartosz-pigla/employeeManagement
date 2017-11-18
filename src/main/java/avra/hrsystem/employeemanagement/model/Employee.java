@@ -1,6 +1,7 @@
 package avra.hrsystem.employeemanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
+import static org.apache.coyote.http11.Constants.a;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -30,7 +33,7 @@ public class Employee implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date dateOfEmployment;
 
-    @JsonIgnore
+    @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
     private Employee leader;
 
     private List<Employee> subordinate=new ArrayList<>();
