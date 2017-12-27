@@ -42,21 +42,25 @@ if [ -d ".m2" ]; then
         echo "COPY .m2 /root/.m2" >> Dockerfile
 fi
 
-#echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
-# echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
-
 if [ $profile = "prod" ]
 then
 	databaseIp="$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' employee-db)"
-	#echo "DATABASE IP: $databaseIp"
 	environmentLine="JDBC_DATABASE_URL=$databaseIp:5432/springbootdb"
-	#echo "ENV $environmentLine"
+	echo "ENV $environmentLine"
 	echo "ENV $environmentLine" >> Dockerfile
 fi
 
 
-echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
+echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName" >> Dockerfile
 echo "EXPOSE 8080" >> Dockerfile
 
+if [ -f add-maven.sh ]
+then
+        >add-maven.sh
+else
+        touch add-maven.sh
+fi
+
 echo "Dockerfile created. Running container..."
-sudo docker build -t run-my-project-image .
+sudo docker build -t employee-project-image .
+sudo docker run --name employee-project -v /home/bartek/.m2:/root/.m2 -it employee-project-image /bin/sh -c "cd employeeManagement; mvn spring-boot:run -Drun.profiles=$(echo "$profile")"
