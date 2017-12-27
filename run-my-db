@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ -f init.sql ]
+then
+	>init.sql
+else
+	touch init.sql
+fi
+
+echo "CREATE DATABASE springbootdb;" >> init.sql
+echo "GRANT ALL PRIVILEGES ON DATABASE springbootdb TO postgres;" >> init.sql
+
+if [ -f Dockerfile ]
+then
+        >Dockerfile
+else
+        touch Dockerfile
+fi
+
+echo "FROM postgres:9.4" >> Dockerfile
+echo "ADD init.sql /docker-entrypoint-initdb.d/" >> Dockerfile
+echo "RUN cd /docker-entrypoint-initdb.d/ && echo 'create database springbootdb;'" >> Dockerfile
+
+sudo docker build -t employee-db-image .
+sudo docker run --name employee-db employee-db-image
+

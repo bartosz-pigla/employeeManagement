@@ -1,0 +1,62 @@
+#!/bin/bash
+echo "Docker initializer"
+while getopts ":b:p:" optname
+	do
+		case "$optname" in
+			"b")
+				branchName=$OPTARG
+				;;
+			"p")
+				profile=$OPTARG
+				;;
+		esac
+done
+
+if ! [[ -v branchName ]]
+then
+	branchName="master"
+fi
+
+if ! [[ -v profile ]]
+then
+	profile="dev"
+fi
+
+echo "Branch name: $branchName"
+echo "Profile name: $profile"
+
+echo "Creating dockerfile..."
+
+cd ~
+
+if [ -f Dockerfile ]
+then
+	>Dockerfile
+else
+	touch Dockerfile
+fi
+
+echo "FROM maven" >> Dockerfile
+
+if [ -d ".m2" ]; then
+        echo "COPY .m2 /root/.m2" >> Dockerfile
+fi
+
+#echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
+# echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
+
+if [ $profile = "prod" ]
+then
+	databaseIp="$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' employee-db)"
+	#echo "DATABASE IP: $databaseIp"
+	environmentLine="JDBC_DATABASE_URL=$databaseIp:5432/springbootdb"
+	#echo "ENV $environmentLine"
+	echo "ENV $environmentLine" >> Dockerfile
+fi
+
+
+echo "RUN git clone https://github.com/bartosz-pigla/employeeManagement && cd employeeManagement && git checkout $branchName && mvn spring-boot:run -Drun.profiles=$profile" >> Dockerfile
+echo "EXPOSE 8080" >> Dockerfile
+
+echo "Dockerfile created. Running container..."
+sudo docker build -t run-my-project-image .
